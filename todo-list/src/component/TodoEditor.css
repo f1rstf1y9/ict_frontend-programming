@@ -1,0 +1,48 @@
+.todo-editor .editor-wrapper {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+}
+
+.todo-editor input {
+  flex: 1;
+  box-sizing: border-box;
+  border: 1px solid rgb(220, 220, 220);
+  border-radius: 5px;
+  padding: 15px;
+}
+
+.todo-editor input:focus {
+  outline: none;
+  border: 1px solid #1f93ff;
+}
+
+.todo-editor button {
+  cursor: pointer;
+  width: 80px;
+  border: none;
+  background-color: #1f93ff;
+  color: white;
+  border-radius: 5px;
+}
+
+.todo-list .searchbar {
+  margin-bottom: 20px;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid rgb(220, 220, 220);
+  box-sizing: border-box;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.todo-list .searchbar:focus {
+  outline: none;
+  border-bottom: 1px solid #1f93ff;
+}
+
+.todo-list .list-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
