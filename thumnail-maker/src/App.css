@@ -1,0 +1,7 @@
+.App {
+  height: 100vh;
+}
+.main {
+  display: flex;
+  min-height: calc(100vh - 50px);
+}
