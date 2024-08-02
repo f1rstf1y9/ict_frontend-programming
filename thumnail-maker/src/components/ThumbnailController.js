@@ -28,37 +28,58 @@ export default function ThumbnailController({
     });
   };
 
-  const onSaveBtnClick = () => {
-    const currentThumbnails = localStorage.getItem("thumbnails");
-    if (thumbnail.id === 0) {
-      const newThumbnailList = [];
-      const newId = currentThumbnails
-        ? currentThumbnails[currentThumbnails.length - 1].id + 1
-        : 1;
-      newThumbnailList.push({
-        id: newId,
-        name: thumbnail.name,
-        title: thumbnail.title,
-        subTitle: thumbnail.subTitle,
-        bgColor: thumbnail.bgColor,
-        titleColor: thumbnail.titleColor,
-        subTitleColor: thumbnail.subTitleColor,
-        isTitleShadows: thumbnail.isTitleShadows,
-      });
-      localStorage.setItem(
-        "thumbnails",
-        JSON.stringify(newThumbnailList.sort((a, b) => b.id - a.id))
-      );
-      setThumbnailList(newThumbnailList);
+  const onSaveBtnClick = async () => {
+    if (thumbnail.name === "") {
+      alert("썸네일 이름을 입력해주세요");
+      return;
     }
 
-    // newThumbnailList[thumbnailList.findIndex((t) => t.id === thumbnail.id)] = {
-    //   ...thumbnail,
-    //   bgColor: onChangeBgColor(),
-    //   titleColor: onChangeTitleColor(),
-    //   subTitleColor: onChangeSubTitleColor(),
-    //   titleShadows: onChangeTitleShadows(),
-    // };
+    const currentThumbnails = localStorage.getItem("thumbnails")
+      ? JSON.parse(localStorage.getItem("thumbnails"))
+      : [];
+    try {
+      domtoimage.toJpeg(document.querySelector(".preview")).then((img) => {
+        if (thumbnail.id === 0) {
+          const newId =
+            currentThumbnails.length > 0
+              ? currentThumbnails[currentThumbnails.length - 1].id + 2
+              : 1;
+          currentThumbnails.push({
+            id: newId,
+            name: thumbnail.name,
+            title: thumbnail.title,
+            subTitle: thumbnail.subTitle,
+            bgColor: thumbnail.bgColor,
+            titleColor: thumbnail.titleColor,
+            subTitleColor: thumbnail.subTitleColor,
+            isTitleShadows: thumbnail.isTitleShadows,
+            createDateTime: new Date().getTime(),
+            img,
+          });
+          localStorage.setItem(
+            "thumbnails",
+            JSON.stringify(currentThumbnails.sort((a, b) => b.id - a.id))
+          );
+          setThumbnailList(currentThumbnails.sort((a, b) => b.id - a.id));
+        } else {
+          currentThumbnails[
+            thumbnailList.findIndex((t) => t.id === thumbnail.id)
+          ] = {
+            id: thumbnail.id,
+            name: thumbnail.name,
+            title: thumbnail.title,
+            subTitle: thumbnail.subTitle,
+            bgColor: thumbnail.bgColor,
+            titleColor: thumbnail.titleColor,
+            subTitleColor: thumbnail.subTitleColor,
+            isTitleShadows: thumbnail.isTitleShadows,
+            img,
+          };
+        }
+      });
+    } catch {
+      console.error("Failed to capture the thumbnail image.");
+    }
   };
 
   return (

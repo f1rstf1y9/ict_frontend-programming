@@ -31,7 +31,9 @@ function App() {
   const [thumbnailList, setThumbnailList] = useState([]);
 
   useEffect(() => {
-    const thumbnails = localStorage.getItem("thumbnails");
+    const thumbnails = localStorage.getItem("thumbnails")
+      ? JSON.parse(localStorage.getItem("thumbnails"))
+      : [];
     setThumbnailList(thumbnails);
   }, []);
 
