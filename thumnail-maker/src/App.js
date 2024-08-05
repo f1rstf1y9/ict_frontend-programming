@@ -1,6 +1,6 @@
 import "./App.css";
-import Content from "./components/Content";
-import Header from "./components/Header";
+import ThumbnailPreview from "./components/ThumbnailPreview";
+import ThumbnailController from "./components/ThumbnailController";
 import ThumbnailList from "./components/ThumbnailList";
 import React, { useReducer, useEffect, useState } from "react";
 
@@ -23,6 +23,10 @@ function reducer(state, action) {
       return { ...state, subTitleColor: action.color };
     case "ChangeTitleShadows":
       return { ...state, isTitleShadows: action.checked };
+    case "ChangeFont":
+      return { ...state, font: action.font };
+    case "ChangeThumbnail":
+      return action.thumbnail;
   }
   return state;
 }
@@ -36,6 +40,10 @@ function App() {
       : [];
     setThumbnailList(thumbnails);
   }, []);
+
+  const onChangeThumbnail = (thumbnail) => {
+    dispatch({ type: "ChangeThumbnail", thumbnail });
+  };
 
   const onChangeName = (content) => {
     dispatch({ type: "ChangeName", content });
@@ -58,16 +66,20 @@ function App() {
   const onChangeTitleShadows = (checked) => {
     dispatch({ type: "ChangeTitleShadows", checked });
   };
+  const onChangeFont = (font) => {
+    dispatch({ type: "ChangeFont", font });
+  };
 
   const [thumbnail, dispatch] = useReducer(reducer, {
-    id: 0,
+    thumbnail_id: -1,
     name: "",
-    title: "제목",
-    subTitle: "소제목",
+    title: "제목을 입력해주세요",
+    subTitle: "부제를 입력해주세요",
     bgColor: "#fff",
     titleColor: "#000",
     subTitleColor: "#000",
     isTitleShadows: false,
+    font: "Pretendard-Regular",
   });
 
   return (
@@ -75,6 +87,7 @@ function App() {
       <ThumbnailStateContext.Provider value={{ thumbnail }}>
         <ThumbnailDispatchContext.Provider
           value={{
+            onChangeThumbnail,
             onChangeName,
             onChangeTitle,
             onChangeSubTitle,
@@ -82,19 +95,18 @@ function App() {
             onChangeTitleColor,
             onChangeSubTitleColor,
             onChangeTitleShadows,
+            onChangeFont,
           }}
         >
-          <Header />
-          <div className="main">
-            <Content
-              thumbnailList={thumbnailList}
-              setThumbnailList={setThumbnailList}
-            />
-            <ThumbnailList
-              thumbnailList={thumbnailList}
-              setThumbnailList={setThumbnailList}
-            />
-          </div>
+          <ThumbnailList
+            thumbnailList={thumbnailList}
+            setThumbnailList={setThumbnailList}
+          />
+          <ThumbnailPreview />
+          <ThumbnailController
+            thumbnailList={thumbnailList}
+            setThumbnailList={setThumbnailList}
+          />
         </ThumbnailDispatchContext.Provider>
       </ThumbnailStateContext.Provider>
     </div>
